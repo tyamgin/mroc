@@ -1,3 +1,5 @@
+## Mean of ROC-AUC's aggregated by label.
+
 # Build:
 `python3 py_module_build.py build_ext --inplace`
 

@@ -4,7 +4,7 @@
 #include "roc.h"
 
 static char module_docstring[] = "This module provides an interface for calculating mean ROC-AUC";
-static char mroc_docstring[] = "Calculate mean of ROC-AUC by labels.";
+static char mroc_docstring[] = "Calculate mean of ROC-AUC's aggregated by label.";
 
 static PyObject *mroc_mean_roc_auc(PyObject *self, PyObject *args);
 static PyMethodDef module_methods[] = {
