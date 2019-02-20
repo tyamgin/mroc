@@ -1,0 +1,6 @@
+cmake-build-*/
+.idea/
+*.so
+*.o
+*.pyc
+
