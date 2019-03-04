@@ -4,11 +4,11 @@
 #include <math.h>
 #include <stdlib.h>
 
-#define EPS 1e-10
+//#define EPS 1e-10
+#define EPS 0.0 // like in sklearn.metrics.roc_auc_score
 
-#define EPS_EQUAL(a, b) (fabs((a) - (b)) < EPS)
+#define EPS_EQUAL(a, b) (fabs((a) - (b)) <= EPS)
 
-double roc_auc(const int* actual, const double* pred, size_t n);
 double mean_roc_auc(const int* labels, const int* actual, const double* pred, size_t n);
 
 #endif //MROC_ROC_H

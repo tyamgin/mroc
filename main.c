@@ -64,6 +64,13 @@ void run_tests() {
         run_test(label, actual, pred, sizeof(actual) / sizeof(actual[0]), 0.75);
     }
     {
+        int label[] = {0, 0, 0, 0, 0, 0, 0};
+        int actual[] = {0, 0, 0, 0, 0, 1, 0};
+        double pred[] = {1.20648799e-30, 1.48942199e-01, 5.61005734e-01, 0.00000000e+00,
+                5.84090818e-01, 0.00000000e+00, 3.83774804e-01};
+        run_test(label, actual, pred, sizeof(actual) / sizeof(actual[0]), 0.08333333333333331);
+    }
+    {
         int label[] = {7,  7, 13, 19,  7, 16,  1, 13, 13, 13, 13, 13,  1, 13,  1};
         int actual[] = {1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
         double pred[] = {1., 0., 0., 0., 1., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0.};

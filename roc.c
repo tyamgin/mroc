@@ -3,6 +3,8 @@
 #include <stdlib.h>
 #include <stdint.h>
 
+// formula described here: https://dyakonov.org/2017/07/28/auc-roc-площадь-под-кривой-ошибок/
+
 typedef struct {
     int label;
     int actual;
@@ -21,7 +23,7 @@ int items_compare(const void* va, const void* vb) {
     return a->actual < b->actual ? -1 : 1;
 }
 
-double _roc(const RocItem* arr, size_t n) {
+int _roc_auc(const RocItem* arr, size_t n, double* result) {
     size_t i, next_num_it;
     size_t prev_num_zeroes_count = 0;
     size_t cur_num_zeroes_count = 0;
@@ -43,21 +45,11 @@ double _roc(const RocItem* arr, size_t n) {
         }
     }
     prev_num_zeroes_count += cur_num_zeroes_count;
-    return (num_wholes + num_halfs * 0.5) / ((uint64_t)prev_num_zeroes_count * (n - prev_num_zeroes_count));
-}
-
-double roc_auc(const int* actual, const double* pred, size_t n) {
-    RocItem* arr = malloc(sizeof(RocItem) * n);
-    size_t i;
-    for (i = 0; i < n; i++) {
-        arr[i].label = 0;
-        arr[i].actual = actual[i];
-        arr[i].pred = pred[i];
+    if (prev_num_zeroes_count == 0 || prev_num_zeroes_count == n) {
+        return 0;
     }
-    qsort(arr, n, sizeof(RocItem), items_compare);
-    double res = _roc(arr, n);
-    free(arr);
-    return res;
+    *result = (num_wholes + num_halfs * 0.5) / ((uint64_t)prev_num_zeroes_count * (n - prev_num_zeroes_count));
+    return 1;
 }
 
 double mean_roc_auc(const int* labels, const int* actual, const double* pred, size_t n) {
@@ -74,8 +66,8 @@ double mean_roc_auc(const int* labels, const int* actual, const double* pred, si
     size_t prev_start = 0;
     for (i = 1; i <= n; i++) {
         if (i == n || arr[i].label != arr[i - 1].label) {
-            double val = _roc(arr + prev_start, i - prev_start);
-            if (val == val) { // do not include NaN
+            double val;
+            if (_roc_auc(arr + prev_start, i - prev_start, &val)) {
                 sum += val;
                 count++;
             }
